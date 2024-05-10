@@ -12,6 +12,10 @@ with A0B.SVD.ATSAM3X8E.PMC; use A0B.SVD.ATSAM3X8E.PMC;
 
 package body A0B.ATSAM3X8E.SPI.Generic_SPI0 is
 
+   pragma Warnings
+     (Off,
+      "all instances of ""SPI0_Handler"" will have the same external name");
+
    procedure SPI0_Handler
      with Export, Convention => C, External_Name => "SPI0_Handler";
 
