@@ -11,7 +11,7 @@ with System;
 with A0B.ATSAM3X8E.PIO;
 private with A0B.Callbacks;
 with A0B.SPI;
-with A0B.SVD.ATSAM3X8E.SPI;
+with A0B.ATSAM3X8E.SVD.SPI;
 private with A0B.Types;
 
 package A0B.ATSAM3X8E.SPI
@@ -21,7 +21,7 @@ is
    type SPI_Slave_Device is tagged;
 
    type SPI_Bus
-     (Peripheral : not null access A0B.SVD.ATSAM3X8E.SPI.SPI0_Peripheral;
+     (Peripheral : not null access A0B.ATSAM3X8E.SVD.SPI.SPI0_Peripheral;
       Identifier : Peripheral_Identifier)
    --    is abstract limited new A0B.SPI.SPI_Bus with
      is abstract tagged limited
@@ -35,10 +35,6 @@ is
      limited new A0B.SPI.SPI_Slave_Device with private;
 
    procedure Configure (Self : in out SPI_Slave_Device'Class);
-
-   procedure Select_Device (Self : in out SPI_Slave_Device'Class);
-
-   procedure Release_Device (Self : in out SPI_Slave_Device'Class);
 
    --  procedure Initialize;
 
@@ -54,16 +50,22 @@ private
       Finished_Callback : A0B.Callbacks.Callback;
    end record;
 
+   overriding procedure Select_Device (Self : in out SPI_Slave_Device);
+
+   overriding procedure Release_Device (Self : in out SPI_Slave_Device);
+
    overriding procedure Transfer
      (Self              : in out SPI_Slave_Device;
       Transmit_Buffer   : aliased A0B.Types.Unsigned_8;
       Receive_Buffer    : aliased out A0B.Types.Unsigned_8;
-      Finished_Callback : A0B.Callbacks.Callback);
+      Finished_Callback : A0B.Callbacks.Callback;
+      Success           : in out Boolean);
 
    overriding procedure Transmit
      (Self              : in out SPI_Slave_Device;
       Transmit_Buffer   : aliased A0B.Types.Unsigned_8;
-      Finished_Callback : A0B.Callbacks.Callback);
+      Finished_Callback : A0B.Callbacks.Callback;
+      Success           : in out Boolean);
 
    procedure On_Interrupt (Self : in out SPI_Bus'Class);
 

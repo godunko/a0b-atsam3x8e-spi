@@ -18,7 +18,7 @@ package A0B.ATSAM3X8E.SPI.Generic_SPI0
 is
 
    type SPI0_Controller is new SPI_Bus
-          (Peripheral => A0B.SVD.ATSAM3X8E.SPI.SPI0_Periph'Access,
+          (Peripheral => A0B.ATSAM3X8E.SVD.SPI.SPI0_Periph'Access,
            Identifier => Serial_Peripheral_Interface_0) with null record
        with Preelaborable_Initialization;
 

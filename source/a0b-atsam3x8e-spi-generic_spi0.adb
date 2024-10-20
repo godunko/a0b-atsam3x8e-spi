@@ -8,7 +8,7 @@ pragma Restrictions (No_Elaboration_Code);
 
 pragma Ada_2022;
 
-with A0B.SVD.ATSAM3X8E.PMC; use A0B.SVD.ATSAM3X8E.PMC;
+with A0B.ATSAM3X8E.SVD.PMC; use A0B.ATSAM3X8E.SVD.PMC;
 
 package body A0B.ATSAM3X8E.SPI.Generic_SPI0 is
 

@@ -7,7 +7,7 @@
 pragma Restrictions (No_Elaboration_Code);
 
 with A0B.ARMv7M.NVIC_Utilities; use A0B.ARMv7M.NVIC_Utilities;
-with A0B.SVD.ATSAM3X8E.SPI;     use A0B.SVD.ATSAM3X8E.SPI;
+with A0B.ATSAM3X8E.SVD.SPI;     use A0B.ATSAM3X8E.SVD.SPI;
 
 package body A0B.ATSAM3X8E.SPI is
 
@@ -59,9 +59,9 @@ package body A0B.ATSAM3X8E.SPI is
    procedure On_Interrupt (Self : in out SPI_Bus'Class) is
       use type System.Address;
 
-      Status : constant A0B.SVD.ATSAM3X8E.SPI.SPI0_SR_Register :=
+      Status : constant A0B.ATSAM3X8E.SVD.SPI.SPI0_SR_Register :=
         SPI0_Periph.SR;
-      Mask   : constant A0B.SVD.ATSAM3X8E.SPI.SPI0_IMR_Register :=
+      Mask   : constant A0B.ATSAM3X8E.SVD.SPI.SPI0_IMR_Register :=
         SPI0_Periph.IMR;
 
    begin
@@ -98,7 +98,7 @@ package body A0B.ATSAM3X8E.SPI is
    -- Release_Device --
    --------------------
 
-   procedure Release_Device (Self : in out SPI_Slave_Device'Class) is
+   overriding procedure Release_Device (Self : in out SPI_Slave_Device) is
    begin
       Disable_Interrupt
         (A0B.ARMv7M.External_Interrupt_Number (Self.Bus.Identifier));
@@ -119,7 +119,7 @@ package body A0B.ATSAM3X8E.SPI is
    -- Select_Device --
    -------------------
 
-   procedure Select_Device (Self : in out SPI_Slave_Device'Class) is
+   overriding procedure Select_Device (Self : in out SPI_Slave_Device) is
    begin
       Self.Bus.Selected_Device := Self'Unchecked_Access;
 
@@ -146,7 +146,8 @@ package body A0B.ATSAM3X8E.SPI is
      (Self              : in out SPI_Slave_Device;
       Transmit_Buffer   : aliased A0B.Types.Unsigned_8;
       Receive_Buffer    : aliased out A0B.Types.Unsigned_8;
-      Finished_Callback : A0B.Callbacks.Callback) is
+      Finished_Callback : A0B.Callbacks.Callback;
+      Success           : in out Boolean) is
    begin
       Self.Transmit_Buffer   := Transmit_Buffer'Address;
       Self.Receive_Buffer    := Receive_Buffer'Address;
@@ -172,7 +173,8 @@ package body A0B.ATSAM3X8E.SPI is
    overriding procedure Transmit
      (Self              : in out SPI_Slave_Device;
       Transmit_Buffer   : aliased A0B.Types.Unsigned_8;
-      Finished_Callback : A0B.Callbacks.Callback) is
+      Finished_Callback : A0B.Callbacks.Callback;
+      Success           : in out Boolean) is
    begin
       Self.Transmit_Buffer   := Transmit_Buffer'Address;
       Self.Receive_Buffer    := System.Null_Address;
